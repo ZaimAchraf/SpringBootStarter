@@ -4,6 +4,7 @@ import com.print.api.exception.GlobalExceptionHandler;
 import com.print.api.user.UserController;
 import com.print.security.config.CorsProperties;
 import com.print.security.config.SecurityConfig;
+import com.print.security.filter.CorrelationIdFilter;
 import com.print.security.filter.JwtFilter;
 import com.print.security.service.AuthService;
 import com.print.security.service.PasswordResetService;
@@ -53,6 +54,8 @@ class SecurityAccessTest {
     @MockBean
     private JwtFilter jwtFilter;
     @MockBean
+    private CorrelationIdFilter correlationIdFilter;
+    @MockBean
     private CorsProperties corsProperties;
 
     @BeforeEach
@@ -68,6 +71,12 @@ class SecurityAccessTest {
             chain.doFilter(invocation.getArgument(0), invocation.getArgument(1));
             return null;
         }).when(jwtFilter).doFilter(any(), any(), any());
+
+        doAnswer(invocation -> {
+            jakarta.servlet.FilterChain chain = invocation.getArgument(2);
+            chain.doFilter(invocation.getArgument(0), invocation.getArgument(1));
+            return null;
+        }).when(correlationIdFilter).doFilter(any(), any(), any());
     }
 
     @Test
