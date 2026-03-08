@@ -37,3 +37,15 @@ frontend:
 app:
   email:
     from: ${APP_EMAIL_FROM}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+info:
+  app:
+    name: Global Starter API
+    description: Reusable Spring Boot starter API
+    version: 1.0.0
