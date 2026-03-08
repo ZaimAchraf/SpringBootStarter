@@ -15,10 +15,10 @@ wait_for_api() {
 
   while [ "${attempt}" -le "${max_attempts}" ]; do
     local code
-    code="$(curl -s -o /dev/null -w "%{http_code}" "${BASE_URL}/api/auth/refresh" || true)"
+    code="$(curl -s -o /dev/null -w "%{http_code}" -X POST "${BASE_URL}/api/auth/refresh" || true)"
 
-    if [ "${code}" = "401" ]; then
-      echo "API is ready (received HTTP 401 on /api/auth/refresh)."
+    if [ "${code}" = "401" ] || [ "${code}" = "200" ]; then
+      echo "API is ready (received HTTP ${code} on POST /api/auth/refresh)."
       return 0
     fi
 
