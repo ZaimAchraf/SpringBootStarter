@@ -1,7 +1,6 @@
 package com.print.security.config;
 
 import com.print.security.filter.JwtFilter;
-import com.print.security.filter.CorrelationIdFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +18,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -26,7 +28,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
-    private final CorrelationIdFilter correlationIdFilter;
     private final CorsProperties corsProperties;
 
     @Bean
@@ -52,7 +53,6 @@ public class SecurityConfig {
                         .anyRequest().hasRole("ADMIN")
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .addFilterBefore(correlationIdFilter, JwtFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
